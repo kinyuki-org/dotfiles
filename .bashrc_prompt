@@ -24,8 +24,18 @@ __set_ps1() {
     local GIT_BG=$(__bg 58)    GIT_FG=$(__fg 215)
     # git バッジ（dirty）: ダークレッド地に薄赤文字
     local DIRTY_BG=$(__bg 52)  DIRTY_FG=$(__fg 203)
+    # venv バッジ: ダークパープル地に薄パープル文字
+    local VENV_BG=$(__bg 54)   VENV_FG=$(__fg 183)
 
     local host_label="${WSL_DISTRO_NAME:-${HOSTNAME%%.*}}"
+
+    # ---- venv セグメント ----
+    local venv_seg=""
+    if [ -n "$VIRTUAL_ENV" ]; then
+        local venv_name
+        venv_name=$(basename "$VIRTUAL_ENV" | sed 's/-[A-Za-z0-9]*-py[0-9].*//')
+        venv_seg=" ${VENV_BG}${VENV_FG}(${venv_name})${R}"
+    fi
 
     # ---- git セグメント ----
     local git_seg=""
@@ -44,6 +54,7 @@ __set_ps1() {
     local line1
     line1="${USER_BG}${USER_FG}[\u@${host_label}]${R}"
     line1+="${PATH_BG}${PATH_FG}[\w]${R}"
+    line1+="${venv_seg}"
     line1+="${git_seg}"
 
     # ---- 2行目: 入力プロンプト ----
