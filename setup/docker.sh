@@ -11,5 +11,5 @@ sudo usermod -aG docker $USER
 
 # WSL2自動起動設定
 if grep -q "microsoft" /proc/version 2>/dev/null; then
-    echo '[boot]command="service docker start"' | sudo tee /etc/wsl.conf
+    echo -e '[boot]\ncommand="service docker start"' | sudo tee /etc/wsl.conf
 fi
