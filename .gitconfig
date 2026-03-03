@@ -1,0 +1,83 @@
+# ============================================================
+# ~/.gitconfig
+# Git のグローバル設定ファイル
+# ============================================================
+
+[user]
+	name  = kinyuki
+	email = 74060654+kinyuki0510@users.noreply.github.com
+
+[core]
+	# デフォルトエディタ（VSCode）
+	editor = code --wait
+	# グローバル gitignore ファイル
+	excludesFile = ~/.gitignore_global
+	# WSL では autocrlf を無効にして LF を維持する
+	autocrlf = false
+	# ファイルパーミッション変更を無視する
+	fileMode = false
+
+[init]
+	# デフォルトブランチ名を main にする
+	defaultBranch = main
+
+[pull]
+	# pull 時はリベースを使う（マージコミットを作らない）
+	rebase = true
+
+[push]
+	# 現在のブランチだけを push する
+	default = current
+	# リモートにないブランチを自動でトラッキング設定する
+	autoSetupRemote = true
+
+[fetch]
+	# リモートで削除されたブランチの追跡参照を自動的に削除する
+	prune = true
+
+[merge]
+	# マージ時にコンフリクトマーカーに共通祖先も表示する（diff3 スタイル）
+	conflictstyle = diff3
+
+[diff]
+	# diff の表示アルゴリズム（より賢い差分表示）
+	algorithm = histogram
+
+[color]
+	# ターミナルが対応していればカラー表示を有効化する
+	ui = auto
+
+[alias]
+	# --- 状態確認 ---
+	s  = status -sb                         # コンパクトな status
+	l  = log --oneline --graph --decorate   # グラフ付き短縮ログ
+	ll = log --oneline --graph --decorate --all  # 全ブランチ込みのログ
+	lp = log --patch --stat                 # 差分付きログ
+
+	# --- ブランチ操作 ---
+	b  = branch -vv                         # ブランチ一覧（追跡情報付き）
+	co = checkout
+	sw = switch
+	sc = switch -c                          # 新ブランチを作って移動
+
+	# --- 変更操作 ---
+	a  = add
+	aa = add -A                             # 全変更をステージ
+	c  = commit
+	cm = commit -m
+	ca = commit --amend --no-edit           # 直前コミットに追記（メッセージ変更なし）
+	cam = commit --amend                    # 直前コミットに追記（メッセージも変更）
+	p  = push
+	pl = pull
+
+	# --- 確認・比較 ---
+	d  = diff
+	ds = diff --staged                      # ステージ済みの差分
+	st = stash
+	sp = stash pop
+
+	# --- ユーティリティ ---
+	# 直前のコミットを取り消す（変更は残す）
+	undo = reset HEAD~1 --mixed
+	# リポジトリのルートに移動する
+	root = rev-parse --show-toplevel

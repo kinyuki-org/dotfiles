@@ -1,0 +1,102 @@
+# ============================================================
+# ~/.gitignore_global
+# 全リポジトリ共通の除外設定
+# .gitconfig の core.excludesFile に登録して使う
+# ============================================================
+
+# ============================================================
+# OS 生成ファイル
+# ============================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+# ============================================================
+# エディタ・IDE
+# ============================================================
+
+# VSCode（プロジェクト固有設定は .vscode/ をリポジトリに含めてもよいが、
+#          個人設定は除外する）
+.vscode/settings.json
+.vscode/launch.json
+.vscode/extensions.json
+*.code-workspace
+
+# JetBrains (IntelliJ, PyCharm, etc.)
+.idea/
+*.iml
+
+# Vim / Neovim
+*.swp
+*.swo
+*~
+Session.vim
+
+# Emacs
+\#*\#
+.\#*
+
+# ============================================================
+# 言語・フレームワーク別
+# ============================================================
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.npm
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+.env/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ============================================================
+# 機密情報・環境設定
+# ============================================================
+
+# 環境変数ファイル（絶対にコミットしない）
+.env
+.env.local
+.env.*.local
+
+# 秘密鍵・証明書
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_ed25519
+
+# ============================================================
+# ビルド成果物・ログ
+# ============================================================
+
+*.log
+*.tmp
+*.temp
+.cache/
