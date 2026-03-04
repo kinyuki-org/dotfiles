@@ -116,8 +116,14 @@ fi
 # WSL: Windows 側ブラウザを BROWSER に設定する
 export BROWSER="$HOME/bin/chrome"
 
-# WSL: X サーバーのディスプレイアドレスを設定する
-export DISPLAY="$(hostname).mshome.net:0.0"
+# WSL: ディスプレイ設定 (WSLg使用)
+# WSLgが利用可能な場合は:0 (WSLg提供のXサーバー)、それ以外はWindowsホスト経由
+if [ -d /mnt/wslg ]; then
+    export DISPLAY=:0
+    export WAYLAND_DISPLAY=wayland-0
+else
+    export DISPLAY="$(hostname).mshome.net:0.0"
+fi
 
 # エディタを vim に設定する
 export EDITOR=vim
