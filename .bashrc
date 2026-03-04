@@ -38,6 +38,14 @@ shopt -s checkwinsize
 # ** でサブディレクトリを再帰的にマッチさせる
 shopt -s globstar
 
+# vimモード
+set -o vi
+
+# カーソル形状をモードで切り替え（挿入=バー、ノーマル=ブロック）
+bind 'set show-mode-in-prompt on'
+bind 'set vi-ins-mode-string "\1\e[6 q\2"'   # 挿入モード: |
+bind 'set vi-cmd-mode-string "\1\e[2 q\2"'   # ノーマルモード: █
+
 # ============================================================
 # 色設定
 # ============================================================
@@ -110,6 +118,9 @@ export BROWSER="$HOME/bin/chrome"
 
 # WSL: X サーバーのディスプレイアドレスを設定する
 export DISPLAY="$(hostname).mshome.net:0.0"
+
+# エディタを vim に設定する
+export EDITOR=vim
 
 # ============================================================
 # PATH 設定
