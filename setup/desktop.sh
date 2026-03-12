@@ -1,7 +1,14 @@
 #!/bin/bash
 
-# WSLg + XFCE4 デスクトップセットアップスクリプト
-# 前提: Windows 11 または Windows 10 21H2以降 + WSL2
+# RDP + XFCE4 デスクトップセットアップスクリプト (WSL2用)
+#
+# 接続方法:
+#   1. WSL2のIPを確認: hostname -I
+#   2. Windowsで mstsc.exe を開き <WSL2のIP>:3389 に接続
+#   3. Ubuntuのユーザー名・パスワードでログイン
+#
+# ワンライナー接続 (PowerShellで実行):
+#   mstsc /v:"$(wsl hostname -I):3389"
 
 set -e
 
@@ -10,15 +17,7 @@ if ! sudo -v 2>/dev/null; then
     exit 1
 fi
 
-# WSLg確認
-if [ ! -d /mnt/wslg ]; then
-    echo "エラー: WSLgが利用できません。" >&2
-    echo "Windows 11 または Windows 10 21H2以降 + WSL2が必要です。" >&2
-    echo "WSLを最新版に更新してください: wsl --update (PowerShellで実行)" >&2
-    exit 1
-fi
-
-echo "=== WSLg + XFCE4 デスクトップセットアップ ==="
+echo "=== RDP + XFCE4 デスクトップセットアップ ==="
 
 sudo apt update
 
@@ -28,6 +27,9 @@ sudo apt install -y \
     xfce4-goodies \
     xfce4-terminal
 
+# xrdp
+sudo apt install -y xrdp
+
 # 日本語フォント・インプットメソッド
 sudo apt install -y \
     fonts-noto-cjk \
@@ -36,67 +38,56 @@ sudo apt install -y \
     fcitx5-mozc \
     fcitx5-config-qt
 
-# ブラウザ (Chromium)
-sudo apt install -y chromium-browser || sudo apt install -y chromium
+# ブラウザ: Firefox (apt版)
+# Ubuntu 22.04はchromium/firefoxがsnap専用のため、Mozilla公式PPAから取得
+sudo add-apt-repository -y ppa:mozillateam/ppa
+# snapより優先度を上げる
+sudo tee /etc/apt/preferences.d/mozilla-firefox > /dev/null << 'EOF'
+Package: *
+Pin: release o=LP-PPA-mozillateam
+Pin-Priority: 1001
+EOF
+sudo apt update
+sudo apt install -y firefox
 
-# ファイルマネージャー等 (xfce4-goodiesに含まれるが念のため)
-sudo apt install -y \
-    thunar \
-    mousepad
+# xrdpをssl-certグループに追加 (証明書エラー防止)
+sudo adduser xrdp ssl-cert 2>/dev/null || true
 
-# D-Bus (GUIアプリに必要)
-sudo apt install -y dbus-x11
-
-# 起動スクリプト作成
-LAUNCHER="$HOME/.local/bin/start-desktop"
-mkdir -p "$HOME/.local/bin"
-cat > "$LAUNCHER" << 'EOF'
-#!/bin/bash
-# XFCE4セッション起動 (WSLg用)
-
-# X11強制 (Waylandは使わない)
-export DISPLAY=:0
-unset WAYLAND_DISPLAY
-export GDK_BACKEND=x11
-export QT_QPA_PLATFORM=xcb
-
-# XDG_RUNTIME_DIR - WSLgのデフォルト(/mnt/wslg/runtime-dir)はパーミッション問題あり
-XDG_RUN="/run/user/$(id -u)"
-if [ ! -d "$XDG_RUN" ]; then
-    sudo mkdir -p "$XDG_RUN"
-    sudo chown "$(whoami):$(whoami)" "$XDG_RUN"
-    sudo chmod 700 "$XDG_RUN"
-fi
-export XDG_RUNTIME_DIR="$XDG_RUN"
-
-# fcitx5 (日本語入力)
+# xrdpセッションでXFCE4を使う設定
+cat > "$HOME/.xsession" << 'EOF'
 export GTK_IM_MODULE=fcitx
 export QT_IM_MODULE=fcitx
 export XMODIFIERS=@im=fcitx
-
-# D-Bus
-if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
-    eval "$(dbus-launch --sh-syntax)"
-fi
-
-fcitx5 -d 2>/dev/null &
-exec xfce4-session
+fcitx5 -d &
+exec startxfce4
 EOF
-chmod +x "$LAUNCHER"
+chmod +x "$HOME/.xsession"
 
-# PATH追加 (.bashrcに未追加の場合のみ)
-if ! grep -q '\.local/bin' "$HOME/.bashrc"; then
-    echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.bashrc"
+# xrdp起動
+sudo service xrdp start
+
+# WSL起動時にxrdpを自動起動 (wsl.confに追記)
+WSL_CONF=/etc/wsl.conf
+if grep -q "^\[boot\]" "$WSL_CONF" 2>/dev/null; then
+    # [boot]セクションが既存 → commandを更新
+    sudo sed -i '/^\[boot\]/,/^\[/ s|^command=.*|command="service xrdp start"|' "$WSL_CONF"
+else
+    echo -e '\n[boot]\ncommand="service xrdp start"' | sudo tee -a "$WSL_CONF" > /dev/null
 fi
 
+WSL_IP=$(hostname -I | awk '{print $1}')
 echo ""
 echo "=== セットアップ完了 ==="
 echo ""
-echo "デスクトップを起動するには:"
-echo "  start-desktop"
+echo "接続方法:"
+echo "  1. WSL2のIP確認: hostname -I  (現在: ${WSL_IP})"
+echo "  2. Windowsで mstsc.exe を開き ${WSL_IP}:3389 に接続"
+echo "  3. Ubuntuのユーザー名・パスワードでログイン"
 echo ""
-echo "または直接:"
-echo "  startxfce4"
+echo "PowerShellワンライナー:"
+echo '  mstsc /v:"$(wsl hostname -I):3389"'
 echo ""
-echo "注意: 初回起動時はXFCEの設定ウィザードが表示されます。"
-echo "      WSLを再起動するか、新しいターミナルを開いてから実行してください。"
+echo "xrdpを手動で起動するには:"
+echo "  sudo service xrdp start"
+echo ""
+echo "注意: WSL再起動後は自動でxrdpが起動します。IPは起動のたびに変わります。"
