@@ -9,6 +9,7 @@ sudo apt update
 
 ## ユーティリティ
 sudo apt install -y \
+    wslu \
     curl \
     wget \
     jq \
@@ -27,3 +28,8 @@ sudo apt install -y \
 sudo apt install -y \
     fzf \
     ripgrep
+
+## 管理
+sudo apt install -y \
+    tree \
+    tmux

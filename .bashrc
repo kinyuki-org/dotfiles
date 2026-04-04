@@ -114,7 +114,7 @@ fi
 # ============================================================
 
 # WSL: ブラウザ設定
-export BROWSER=firefox
+export BROWSER=wslview
 
 # WSL: ディスプレイ設定
 # RDP/Xセッション内ではxrdpがDISPLAYを設定済みのため上書きしない
@@ -164,3 +164,9 @@ export NVM_DIR="$HOME/.nvm"
 
 # --- less: バイナリファイルを見やすく表示する ---
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# --- SSH Agent 自動起動 ---
+if [ -z "$SSH_AUTH_SOCK" ]; then
+    eval $(ssh-agent -s) > /dev/null
+    ssh-add ~/.ssh/id_ed25519 2>/dev/null
+fi

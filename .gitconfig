@@ -3,9 +3,14 @@
 # Git のグローバル設定ファイル
 # ============================================================
 
-[user]
-	name  = kinyuki
-	email = 74060654+kinyuki0510@users.noreply.github.com
+# ユーザー情報は環境ごとのローカル設定ファイルで上書きする
+# 例: ~/.gitconfig.local に以下を記述
+#   [user]
+#       name  = Your Name
+#       email = your@email.com
+#       signingkey = ~/.ssh/id_ed25519.pub
+[includeIf "gitdir:~/"]
+	path = ~/.gitconfig.local
 
 [core]
 	# デフォルトエディタ（VSCode）
@@ -81,3 +86,10 @@
 	undo = reset HEAD~1 --mixed
 	# リポジトリのルートに移動する
 	root = rev-parse --show-toplevel
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[gpg]
+	format = ssh
+[commit]
+	gpgsign = true

@@ -1,0 +1,7 @@
+# Git — 環境固有のユーザー設定（氏名・メール等）は追跡しない
+.gitconfig.local
+
+# Claude Code — 管理対象ファイルのみ明示的に追跡（ホワイトリスト）
+.claude/*
+!.claude/CLAUDE.md
+!.claude/settings.json

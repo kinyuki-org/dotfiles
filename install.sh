@@ -85,6 +85,10 @@ link_file ".inputrc"
 #    ホームに置くことでサブディレクトリ全体に効かせることもできる
 link_file ".editorconfig"
 
+# Claude Code グローバル設定
+link_file ".claude/CLAUDE.md"
+link_file ".claude/settings.json"
+
 echo ""
 echo -e "${GREEN}========================================"
 echo -e " 完了！"
