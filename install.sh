@@ -87,6 +87,7 @@ link_file ".editorconfig"
 
 # Claude Code グローバル設定
 link_file ".claude/CLAUDE.md"
+link_file ".claude/persona.md"
 link_file ".claude/settings.json"
 
 echo ""
