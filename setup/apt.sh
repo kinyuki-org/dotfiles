@@ -33,3 +33,8 @@ sudo apt install -y \
 sudo apt install -y \
     tree \
     tmux
+
+## 開発ツール
+sudo apt install -y \
+    shellcheck \
+    shfmt

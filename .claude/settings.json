@@ -8,11 +8,15 @@
       "Bash(cat *.env*)",
       "Bash(less .env*)",
       "Bash(less *.env*)",
+      "Bash(more .env*)",
+      "Bash(more *.env*)",
       "Bash(head .env*)",
       "Bash(head *.env*)",
       "Bash(tail .env*)",
       "Bash(tail *.env*)",
-      "Bash(grep*.env*)"
+      "Bash(grep*.env*)",
+      "Bash(printenv*)",
+      "Read(*.env*)"
     ]
   }
 }

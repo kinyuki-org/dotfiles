@@ -30,7 +30,7 @@ error()   { echo -e "${RED}[error]${RESET} $*" >&2; }
 
 # ---- シンボリックリンク作成関数 ----
 # 引数: <dotfiles 内のファイル名>
-link_file() {
+create_link() {
     local filename="$1"
     local src="${DOTFILES_DIR}/${filename}"
     local dest="${HOME_DIR}/${filename}"
@@ -70,25 +70,26 @@ echo -e "========================================${RESET}"
 echo ""
 
 # シェル設定
-link_file ".bashrc"
-link_file ".bashrc_prompt"
+create_link ".bashrc"
+create_link ".bashrc_prompt"
 
 # Git 設定
-link_file ".gitconfig"
-link_file ".gitignore_global"
+create_link ".gitconfig"
+create_link ".gitignore_global"
 
 # Readline 設定
-link_file ".inputrc"
+create_link ".inputrc"
 
 # エディタ共通設定
 # ※ .editorconfig はプロジェクトルートに置くのが本来の用途だが、
 #    ホームに置くことでサブディレクトリ全体に効かせることもできる
-link_file ".editorconfig"
+create_link ".editorconfig"
 
 # Claude Code グローバル設定
-link_file ".claude/CLAUDE.md"
-link_file ".claude/persona.md"
-link_file ".claude/settings.json"
+create_link ".claude/CLAUDE.md"
+create_link ".claude/persona.md"
+create_link ".claude/settings.json"
+create_link ".claude/commands"
 
 echo ""
 echo -e "${GREEN}========================================"

@@ -10,6 +10,7 @@ code --install-extension hediet.vscode-drawio
 code --install-extension patbenatar.advanced-new-file
 code --install-extension alefragnani.project-manager
 code --install-extension codezombiech.gitignore
+code --install-extention mads-hartmann.bash-ide-vscode
 
 ## AI
 code --install-extension github.copilot
