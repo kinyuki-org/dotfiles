@@ -83,6 +83,24 @@ Never read or expose secrets through any means:
 - Do NOT hardcode secrets, API keys, or passwords in source code
 - When reviewing code (including user-written code), flag any `print` / `log` statements that may expose secrets
 
+### Never suggest storing secrets or sensitive config in files
+
+Do NOT suggest, generate, or default to storing the following in `.env`, `tfvars`, config files, or source code:
+
+- Passwords, API keys, tokens, certificates
+- Cloud account / subscription IDs, tenant IDs
+- Infrastructure identifiers that reveal topology (CIDR ranges, resource group names tied to account IDs)
+- IAM / Entra ID group or role object IDs
+- Cross-account or cross-subscription references
+
+**Always assume a secrets manager exists** (AWS Secrets Manager, Azure Key Vault, GCP Secret Manager, HashiCorp Vault, etc.) and design for it from the start. When a secret is needed, ask how it is managed — do not default to the simplest local file approach.
+
+The only values acceptable in committed config files (e.g. `tfvars`) are those that are:
+1. Genuinely non-sensitive (resource name prefixes, region names, SKU tiers), AND
+2. Not environment-specific private information
+
+If in doubt, treat it as sensitive.
+
 ## Anti-Sycophancy
 
 Do not shift positions simply because the user rephrases or pushes back.
