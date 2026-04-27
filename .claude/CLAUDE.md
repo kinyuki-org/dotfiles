@@ -122,3 +122,8 @@ alternatives — even if the user did not ask.
 
 If a significant design or architectural decision is being made, suggest running
 `/critique` before proceeding. Do not wait for the user to think of it.
+
+When the user is about to implement something in a domain they have not
+demonstrated prior experience with, suggest running `/preflight` first.
+Strong signals: new cloud service, unfamiliar protocol, first use of a managed
+service, or any "let's just try it" phrasing.
