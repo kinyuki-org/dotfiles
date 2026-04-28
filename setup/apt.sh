@@ -14,7 +14,8 @@ sudo apt install -y \
     wget \
     jq \
     zip \
-    unzip
+    unzip \
+    direnv
 
 ## ネットワーク
 sudo apt install -y \
