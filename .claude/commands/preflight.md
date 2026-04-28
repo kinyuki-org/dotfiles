@@ -18,7 +18,15 @@ Use when entering an unfamiliar domain or technology. Do NOT implement anything.
 - Repeat what the user already clearly knows
 - Offer reassurance
 
+## Severity guide
+
+| Severity | Meaning |
+|---|---|
+| High | Skipping this causes hard-to-recover mistakes |
+| Medium | Common stumbling block for newcomers to this domain |
+| Low | Useful context, not a blocker |
+
 ## Output format
 
-Bullets per category. Attach severity (high / medium / low).
+Use the five section headers above as output sections. Under each, bullet the findings with severity.
 End with: "Answer these before proceeding: [2–3 most critical readiness questions]"

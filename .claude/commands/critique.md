@@ -15,7 +15,15 @@ Identify blind spots in the most recent decision, design, or direction using the
 - Close with "you're absolutely right"
 - Repeat what the user already said
 
+## Severity guide
+
+| Severity | Meaning |
+|---|---|
+| High | Could cause the decision or project to fail if unaddressed |
+| Medium | Increases risk or cost significantly, but recoverable |
+| Low | Worth knowing; unlikely to be a blocker on its own |
+
 ## Output format
 
-Bullet points for each angle, concise. Attach severity (high / medium / low).
+Use the four section headers above (Overlooked risks, Hidden assumptions, etc.) as output sections. Under each, bullet the findings with severity. Worst-case scenario: write as a single narrative paragraph.
 End with a single sentence: "The single most important point is…"
