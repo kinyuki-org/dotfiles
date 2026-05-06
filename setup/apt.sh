@@ -39,3 +39,8 @@ sudo apt install -y \
 sudo apt install -y \
     shellcheck \
     shfmt
+
+## podman
+sudo apt install -y \
+    podman \
+    uidmap
