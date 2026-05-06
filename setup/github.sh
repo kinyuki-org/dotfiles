@@ -1,20 +1,37 @@
 #!/bin/bash
 
-if ! sudo -v 2>/dev/null; then
-    echo "エラー: sudo権限が必要です。" >&2
-    exit 1
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS: Homebrew でインストール
+    brew install gh
+
+    # --- SSH Agent 自動起動を .zshrc に追記 ---
+    if ! grep -q "SSH Agent 自動起動" ~/.zshrc 2>/dev/null; then
+        cat >> ~/.zshrc << 'EOF'
+
+# --- SSH Agent 自動起動 ---
+if [ -z "$SSH_AUTH_SOCK" ]; then
+    eval "$(ssh-agent -s)" > /dev/null
+    ssh-add --apple-use-keychain ~/.ssh/id_ed25519 2>/dev/null
 fi
+EOF
+        echo "SSH Agent 自動起動を .zshrc に追記しました。"
+    fi
+else
+    # Linux/WSL
+    if ! sudo -v 2>/dev/null; then
+        echo "エラー: sudo権限が必要です。" >&2
+        exit 1
+    fi
 
-# gh CLI インストール
-GH_VERSION=$(curl -s https://api.github.com/repos/cli/cli/releases/latest | jq -r '.tag_name | ltrimstr("v")')
-curl -sL "https://github.com/cli/cli/releases/latest/download/gh_${GH_VERSION}_linux_amd64.tar.gz" \
-    | tar -xz -C /tmp
-sudo install /tmp/gh_${GH_VERSION}_linux_amd64/bin/gh /usr/local/bin/gh
-rm -rf /tmp/gh_${GH_VERSION}_linux_amd64
+    GH_VERSION=$(curl -s https://api.github.com/repos/cli/cli/releases/latest | jq -r '.tag_name | ltrimstr("v")')
+    curl -sL "https://github.com/cli/cli/releases/latest/download/gh_${GH_VERSION}_linux_amd64.tar.gz" \
+        | tar -xz -C /tmp
+    sudo install "/tmp/gh_${GH_VERSION}_linux_amd64/bin/gh" /usr/local/bin/gh
+    rm -rf "/tmp/gh_${GH_VERSION}_linux_amd64"
 
-# --- SSH Agent 自動起動を .bashrc に追記 ---
-if ! grep -q "SSH Agent 自動起動" ~/.bashrc; then
-    cat >> ~/.bashrc << 'EOF'
+    # --- SSH Agent 自動起動を .bashrc に追記 ---
+    if ! grep -q "SSH Agent 自動起動" ~/.bashrc; then
+        cat >> ~/.bashrc << 'EOF'
 
 # --- SSH Agent 自動起動 ---
 if [ -z "$SSH_AUTH_SOCK" ]; then
@@ -22,7 +39,8 @@ if [ -z "$SSH_AUTH_SOCK" ]; then
     ssh-add ~/.ssh/id_ed25519 2>/dev/null
 fi
 EOF
-    echo "SSH Agent 自動起動を .bashrc に追記しました。"
+        echo "SSH Agent 自動起動を .bashrc に追記しました。"
+    fi
 fi
 
 # ============================================================

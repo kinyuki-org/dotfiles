@@ -72,6 +72,8 @@ echo ""
 # シェル設定
 create_link ".bashrc"
 create_link ".bashrc_prompt"
+create_link ".zshrc"
+create_link ".zshrc_prompt"
 
 # Git 設定
 create_link ".gitconfig"
@@ -97,5 +99,6 @@ echo -e " 完了！"
 echo -e "========================================${RESET}"
 echo ""
 echo "シェルに反映するには以下を実行してください:"
-echo "  source ~/.bashrc"
+echo "  source ~/.bashrc   # bash (Linux/WSL)"
+echo "  source ~/.zshrc    # zsh  (macOS)"
 echo ""
